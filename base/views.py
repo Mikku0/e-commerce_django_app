@@ -1,7 +1,38 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem
+from .forms import CustomUserCreationForm
 
-# Create your views here.
+
+def login_page(request):
+    page = 'login'
+
+    if request.user.is_authenticated:
+        messages.success(request, 'You are already logged in')
+        return redirect('home')
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            user = CustomUser.objects.get(email=email)
+        except:
+            messages.error(request, 'User does not exist')
+
+        user = authenticate(request, email=email, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Email or password is wrong')
+
+    context = {'page': page}
+    return render(request, 'base/login_register.html', context)
 
 def home(request):
     return render(request, 'base/index.html')
