@@ -34,6 +34,10 @@ def login_page(request):
     context = {'page': page}
     return render(request, 'base/login_register.html', context)
 
+def register_page(request):
+    form = CustomUserCreationForm
+    return render(request, 'base/login_register.html', {'form': form})
+
 def home(request):
     return render(request, 'base/index.html')
 
