@@ -60,6 +60,9 @@ def home(request):
 def about(request):
     return render(request, 'base/about.html')
 
+def wishlist(request):
+    return render(request, 'base/wishlist.html')
+
 def contact(request):
     return render(request, 'base/contact.html')
 

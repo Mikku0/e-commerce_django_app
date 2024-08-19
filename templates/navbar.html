@@ -33,11 +33,21 @@
               </li>
               {% if request.user.is_authenticated %}
               <li>
-                <div class="icon icon-person1">
-                  <!-- add {/% url 'user-page' %} -->
-                  <p>Hello <span><a href="{% url 'home' %}">{{ request.user.username }}</a></span></p>
-                  <p><a href="{% url 'logout' %}">Logout</a></p>
-                </div>
+                <nav class="site-navigation text-right text-md-center" role="navigation">
+                  <div class="container">
+                    <ul class="site-menu js-clone-nav d-none d-md-block">
+                      <li class="has-children">
+                        <!-- add {/% url 'user-page' %} -->
+                        <a href="{% url 'home' %}">{{request.user.username}}</a>
+                        <ul class="dropdown">
+                          <li><a href="{% url 'logout' %}">Logout</a></li>
+                          <li><a href="#">Menu Two</a></li>
+                          <li><a href="#">Menu Three</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </nav>
               </li>
               {% else %}
               <li>
