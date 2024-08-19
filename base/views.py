@@ -34,8 +34,24 @@ def login_page(request):
     context = {'page': page}
     return render(request, 'base/login_register.html', context)
 
+def logout_user(request):
+    logout(request)
+    return redirect('home')
+
 def register_page(request):
     form = CustomUserCreationForm
+    
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'An error occurred')
+
     return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):

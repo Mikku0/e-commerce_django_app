@@ -20,7 +20,6 @@
         <div class="col-6 col-md-4 order-3 order-md-3 text-right">
           <div class="site-top-icons">
             <ul>
-              <li><a href="{% url 'login' %}"><span class="icon icon-person"></span></a></li>
               <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
               <li>
                 <a href="{% url 'cart' %}" class="site-cart">
@@ -28,8 +27,25 @@
                   <span class="count">2</span>
                 </a>
               </li>
-              <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span
-                    class="icon-menu"></span></a></li>
+              <li class="d-inline-block d-md-none ml-md-0">
+                <a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span>
+                </a>
+              </li>
+              {% if request.user.is_authenticated %}
+              <li>
+                <div class="icon icon-person1">
+                  <!-- add {/% url 'user-page' %} -->
+                  <p>Hello <span><a href="{% url 'home' %}">{{ request.user.username }}</a></span></p>
+                  <p><a href="{% url 'logout' %}">Logout</a></p>
+                </div>
+              </li>
+              {% else %}
+              <li>
+                <div class="icon icon-person1">
+                  <p><a href="{% url 'login' %}">Login</a></p>
+                </div>
+              </li>
+              {% endif %}
             </ul>
           </div>
         </div>

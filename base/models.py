@@ -3,13 +3,16 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 class CustomUser(AbstractUser):
-    name = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200, null=True, unique=True)
     phone_number = models.CharField(max_length=20, blank=True)
     email = models.EmailField(unique=True, null=True)
     address = models.TextField(blank=True)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
     def __str__(self):
-        return self.username
+        return self.email
 
 class Order(models.Model):    
 

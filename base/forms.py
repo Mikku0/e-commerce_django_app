@@ -3,14 +3,30 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    phone_number = forms.CharField(max_length=20, required=False)
-    address = forms.CharField(widget=forms.Textarea, required=False)
-    name = forms.CharField(max_length=200, required=False)
+    username = forms.CharField(
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'JohnDoe123'}),
+    )
+    email = forms.EmailField(
+        required=True, 
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john123@email.com'}),
+    )
+    password1 = forms.CharField(
+        label='Password', 
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '********'}), 
+        required=True,        
+    )
+    password2 = forms.CharField(
+        label='Password Confirmation', 
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '********'}), 
+        required=True,        
+    )
+
+    usable_password = None
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'phone_number', 'address', 'name', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
