@@ -2,8 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
-class CustomUser(AbstractUser):
-    name = models.CharField(max_length=200, null=True, unique=True)
+class CustomUser(AbstractUser):    
     phone_number = models.CharField(max_length=20, blank=True)
     email = models.EmailField(unique=True, null=True)
     address = models.TextField(blank=True)

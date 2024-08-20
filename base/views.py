@@ -80,3 +80,6 @@ def shop(request):
 
 def thank_you(request):
     return render(request, 'base/thank-you.html')
+
+def user_page(request):
+    return render(request, 'base/user-page.html')
