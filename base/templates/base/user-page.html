@@ -19,7 +19,7 @@
                     </li>
                     <li class="nav-item mb-1">
                         <a class="nav-link" id="address-tab" data-toggle="pill" href="#address" role="tab"
-                            aria-controls="address" aria-selected="false">Address</a>
+                            aria-controls="address" aria-selected="false">Billing address</a>
                     </li>
                 </ul>
             </div>
@@ -33,13 +33,24 @@
                 <div class="tab-pane fade show active" id="account-info" role="tabpanel"
                     aria-labelledby="account-info-tab">
                     <div class="border p-4 rounded mb-4">
-                        <h3 class="mb-4 h3 text-uppercase text-black d-block">Account Information</h3>
+                        <h3 class="mb-4 h3 text-uppercase text-black d-block">Account Information</h3>                        
                         <hr>
-                        <div class="col-md-12 mb-0">        
-                            <span class="mx-1 mb-4">First name:</span>                             
-                            <strong class="text-black"> {{request.user.first_name}}</strong>                            
-                        </div>                        
+                        <div class="col-md-12 mb-0">
+                            <span class="mx-1 mb-4">Username:</span>
+                            <strong class="text-black"> {{request.user.username}}</strong>
+                        </div>
                         <hr>
+                        <div class="col-md-12 mb-0">
+                            <span class="mx-1 mb-4">Email:</span>
+                            <strong class="text-black"> {{request.user.email}}</strong>
+                        </div>
+                        <hr>
+                        <div class="col-md-12 mb-0">
+                            <span class="mx-1 mb-4">Password:</span>
+                            <strong class="text-black">********</strong>
+                        </div>
+                        <hr>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-primary btn-sm">Logout</a>                   
                     </div>
                 </div>
 
@@ -54,8 +65,29 @@
                 <!-- Address Section -->
                 <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                     <div class="border p-4 rounded mb-4">
-                        <h3 class="mb-4 h3 text-uppercase text-black d-block">Address</h3>
-                        <p>Your address information will go here...</p>
+                        <h3 class="mb-4 h3 text-uppercase text-black d-block">Billing address</h3>
+                        <hr>
+                        <div class="col-md-12 mb-0">
+                            <span class="mx-1 mb-4">First name:</span>
+                            <strong class="text-black"> {{request.user.first_name}}</strong>
+                        </div>
+                        <hr>
+                        <div class="col-md-12 mb-0">
+                            <span class="mx-1 mb-4">Last name:</span>
+                            <strong class="text-black"> {{request.user.last_name}}</strong>
+                        </div>
+                        <hr>
+                        <div class="col-md-12 mb-0">
+                            <span class="mx-1 mb-4">Phone number:</span>
+                            <strong class="text-black"> {{request.user.phone_number}}</strong>
+                        </div>
+                        <hr>
+                        <div class="col-md-12 mb-0">
+                            <span class="mx-1 mb-4">Address:</span>
+                            <strong class="text-black"> {{request.user.address}}</strong>
+                        </div>
+                        <hr>
+                        <a href="{% url 'user-update-address' %}" class="btn btn-sm btn-primary">Edit data</a>
                     </div>
                 </div>
 

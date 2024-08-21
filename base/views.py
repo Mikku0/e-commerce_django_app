@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem
-from .forms import CustomUserCreationForm
+from .forms import UserForm, UserAddressForm
+from django.contrib.auth import update_session_auth_hash
 
 
 def login_page(request):
@@ -39,10 +40,10 @@ def logout_user(request):
     return redirect('home')
 
 def register_page(request):
-    form = CustomUserCreationForm
+    form = UserForm
     
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = UserForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -83,3 +84,21 @@ def thank_you(request):
 
 def user_page(request):
     return render(request, 'base/user-page.html')
+
+def user_address_update(request):
+    user = request.user
+    username = request.user.username
+    form = UserAddressForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserAddressForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, user)  # To prevent logout
+            messages.success(request, 'Billing Address has been updated!')
+            return redirect('user-page')
+        else:
+            request.user.username = username
+            messages.error(request, 'invalid data')
+
+    return render(request, 'base/user-update-address.html', {'form': form})
