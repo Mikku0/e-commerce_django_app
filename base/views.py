@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -35,13 +35,15 @@ def login_page(request):
     context = {'page': page}
     return render(request, 'base/login_register.html', context)
 
+
 def logout_user(request):
     logout(request)
     return redirect('home')
 
+
 def register_page(request):
     form = UserForm
-    
+
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
@@ -55,35 +57,56 @@ def register_page(request):
 
     return render(request, 'base/login_register.html', {'form': form})
 
+
 def home(request):
     return render(request, 'base/index.html')
+
 
 def about(request):
     return render(request, 'base/about.html')
 
+
 def wishlist(request):
     return render(request, 'base/wishlist.html')
+
 
 def contact(request):
     return render(request, 'base/contact.html')
 
+
 def shop_single(request):
     return render(request, 'base/shop-single.html')
 
+
+@login_required(login_url='login')
 def cart(request):
-    return render(request, 'base/cart.html')
+    user_order = Order.objects.filter(user=request.user).first()
+    if user_order:
+        order_items = user_order.items.all()
+        for order_item in order_items:
+            order_item.total_price = order_item.quantity * order_item.item.price
+    else:
+        order_items = []
+
+    context = {'order_items': order_items}
+    return render(request, 'base/cart.html', context)
+
 
 def checkout(request):
     return render(request, 'base/checkout.html')
 
+
 def shop(request):
     return render(request, 'base/shop.html')
+
 
 def thank_you(request):
     return render(request, 'base/thank-you.html')
 
+
 def user_page(request):
     return render(request, 'base/user-page.html')
+
 
 def user_address_update(request):
     user = request.user
@@ -102,3 +125,23 @@ def user_address_update(request):
             messages.error(request, 'invalid data')
 
     return render(request, 'base/user-update-address.html', {'form': form})
+
+
+@login_required(login_url='login')
+def update_quantity(request, order_item_id, action):
+    order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user)
+
+    if action == 'increase':
+        order_item.quantity += 1
+    elif action == 'decrease' and order_item.quantity > 1:
+        order_item.quantity -= 1
+
+    order_item.save()
+    return redirect('cart')
+
+
+@login_required(login_url='login')
+def remove_item(request, order_item_id):
+    order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user)
+    order_item.delete()
+    return redirect('cart')
