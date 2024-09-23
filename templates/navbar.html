@@ -24,7 +24,8 @@
               <li>
                 <a href="{% url 'cart' %}" class="site-cart">
                   <span class="icon icon-shopping_cart"></span>
-                  <span class="count">2</span>
+                  <!-- <span class="count">2</span> -->
+                  <!-- add dynamic counter -->
                 </a>
               </li>
               <li class="d-inline-block d-md-none ml-md-0">
@@ -36,7 +37,7 @@
                 <nav class="site-navigation text-right text-md-center" role="navigation">
                   <div class="container">
                     <ul class="site-menu js-clone-nav d-none d-md-block">
-                      <li class="has-children">                        
+                      <li class="has-children">
                         <a href="{% url 'user-page' %}">{{request.user.username}}</a>
                         <ul class="dropdown">
                           <li><a href="{% url 'logout' %}">Logout</a></li>
