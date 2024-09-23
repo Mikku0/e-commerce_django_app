@@ -146,6 +146,7 @@ def remove_item(request, order_item_id):
     order_item.delete()
     return redirect('cart')
 
+
 @login_required(login_url='login')
 def update_cart(request):
     if request.method == 'POST':

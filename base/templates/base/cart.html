@@ -41,7 +41,7 @@
                                 <td>${{ order_item.item.price }}</td>
                                 <td>
                                     <input type="number" name="quantity_{{ order_item.id }}"
-                                           class="form-control text-center" style="max-width: 100px;"
+                                           class="form-control text-center" style="max-width: 70px; display: inline-block;"
                                            value="{{ order_item.quantity }}">
                                 </td>
                                 <td>${{ order_item.total_price|floatformat:2 }}</td>
