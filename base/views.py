@@ -152,12 +152,18 @@ def update_cart(request):
     if request.method == 'POST':
         user_order = Order.objects.filter(user=request.user).first()
         if user_order:
-            for order_item in user_order.items.all():
-                quantity_field = f'quantity_{order_item.id}'
-                if quantity_field in request.POST:
-                    new_quantity = int(request.POST[quantity_field])
-                    if new_quantity > 0:
-                        order_item.quantity = new_quantity
-                        order_item.save()
+            if 'remove_item' in request.POST:
+                order_item_id = request.POST.get('remove_item')
+                order_item = user_order.items.filter(id=order_item_id).first()
+                if order_item:
+                    order_item.delete()
+            else:
+                for order_item in user_order.items.all():
+                    quantity_field = f'quantity_{order_item.id}'
+                    if quantity_field in request.POST:
+                        new_quantity = int(request.POST[quantity_field])
+                        if new_quantity > 0:
+                            order_item.quantity = new_quantity
+                            order_item.save()
 
         return redirect('cart')
