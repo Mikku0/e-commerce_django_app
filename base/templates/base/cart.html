@@ -15,7 +15,8 @@
     <div class="site-section">
         <div class="container">
             <div class="row mb-5">
-                <form class="col-md-12" method="post">
+                <form class="col-md-12" method="post" action="{% url 'update_cart' %}">
+                    {% csrf_token %}
                     <div class="site-blocks-table">
                         <table class="table table-bordered">
                             <thead>
@@ -32,64 +33,42 @@
                             {% for order_item in order_items %}
                             <tr>
                                 <td class="product-thumbnail">
-                                    <img src="{{order_item.item.image.url}}" alt="Image" class="img-fluid">
+                                    <img src="{{ order_item.item.image.url }}" alt="Image" class="img-fluid">
                                 </td>
                                 <td class="product-name">
-                                    <h2 class="h5 text-black">{{order_item.item.name}}</h2>
+                                    <h2 class="h5 text-black">{{ order_item.item.name }}</h2>
                                 </td>
-                                <td>${{order_item.item.price}}</td>
+                                <td>${{ order_item.item.price }}</td>
                                 <td>
-                                    <div class="d-flex justify-content-center">
-                                        <div class="input-group mb-3" style="max-width: 120px;">
-                                            <div class="input-group-prepend">
-                                                <form method="post"
-                                                      action="{% url 'update_quantity' order_item.id 'decrease' %}">
-                                                    {% csrf_token %}
-                                                    <button class="btn btn-outline-primary js-btn-minus" type="submit">
-                                                        &minus;
-                                                    </button>
-                                                </form>
-                                            </div>
-                                            <input type="number" class="form-control text-center" style="height: auto; text-align: right !important;"
-                                                   value="{{order_item.quantity}}" disabled>
-                                            <div class="input-group-append">
-                                                <form method="post"
-                                                      action="{% url 'update_quantity' order_item.id 'increase' %}">
-                                                    {% csrf_token %}
-                                                    <button class="btn btn-outline-primary js-btn-plus" type="submit">
-                                                        &plus;
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <input type="number" name="quantity_{{ order_item.id }}"
+                                           class="form-control text-center" style="max-width: 100px;"
+                                           value="{{ order_item.quantity }}">
                                 </td>
                                 <td>${{ order_item.total_price|floatformat:2 }}</td>
                                 <td>
-                                    <form method="post" action="{% url 'remove_item' order_item.id %}">
-                                        {% csrf_token %}
-                                        <button class="btn btn-primary btn-sm" type="submit">X</button>
-                                    </form>
+                                    <button class="btn btn-primary btn-sm" name="remove" value="{{ order_item.id }}"
+                                            type="submit">X
+                                    </button>
                                 </td>
                             </tr>
                             {% endfor %}
-
                             </tbody>
                         </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary btn-sm btn-block" type="submit">Update Cart</button>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'shop' %}" class="btn btn-outline-primary btn-sm btn-block">
+                                Continue Shopping</a>
+                        </div>
                     </div>
                 </form>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="row mb-5">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <button class="btn btn-primary btn-sm btn-block">Update Cart</button> <!-- update to increase and decrease quantity -->
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <label class="text-black h4" for="coupon">Coupon</label>
@@ -130,10 +109,9 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg py-3 btn-block">Proceed
-                                        To Checkout</a>
+                                    <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg py-3 btn-block">
+                                        Proceed To Checkout</a>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -142,6 +120,4 @@
         </div>
     </div>
 </div>
-
-
 {% endblock content %}

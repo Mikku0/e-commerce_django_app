@@ -145,3 +145,18 @@ def remove_item(request, order_item_id):
     order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user)
     order_item.delete()
     return redirect('cart')
+
+@login_required(login_url='login')
+def update_cart(request):
+    if request.method == 'POST':
+        user_order = Order.objects.filter(user=request.user).first()
+        if user_order:
+            for order_item in user_order.items.all():
+                quantity_field = f'quantity_{order_item.id}'
+                if quantity_field in request.POST:
+                    new_quantity = int(request.POST[quantity_field])
+                    if new_quantity > 0:
+                        order_item.quantity = new_quantity
+                        order_item.save()
+
+        return redirect('cart')
