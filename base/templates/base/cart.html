@@ -16,53 +16,56 @@
         <div class="container">
             <div class="row mb-5">
                 <form class="col-md-12" method="post" action="{% url 'update_cart' %}">
-    {% csrf_token %}
-    <div class="site-blocks-table">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th class="product-thumbnail">Image</th>
-                <th class="product-name">Product</th>
-                <th class="product-price">Price</th>
-                <th class="product-quantity">Quantity</th>
-                <th class="product-total">Total</th>
-                <th class="product-remove">Remove</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for order_item in order_items %}
-            <tr>
-                <td class="product-thumbnail">
-                    <img src="{{ order_item.item.image.url }}" alt="Image" class="img-fluid">
-                </td>
-                <td class="product-name">
-                    <h2 class="h5 text-black">{{ order_item.item.name }}</h2>
-                </td>
-                <td>${{ order_item.item.price }}</td>
-                <td>
-                    <input type="number" name="quantity_{{ order_item.id }}"
-                           class="form-control text-center" style="max-width: 70px; display: inline-block;"
-                           value="{{ order_item.quantity }}" min="1">
-                </td>
-                <td>${{ order_item.total_price|floatformat:2 }}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm" name="remove_item" value="{{ order_item.id }}" type="submit">X</button>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <button class="btn btn-primary btn-sm btn-block" type="submit">Update Cart</button>
-        </div>
-        <div class="col-md-6">
-            <a href="{% url 'shop' %}" class="btn btn-outline-primary btn-sm btn-block">
-                Continue Shopping</a>
-        </div>
-    </div>
-</form>
+                    {% csrf_token %}
+                    <div class="site-blocks-table">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="product-thumbnail">Image</th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-total">Total</th>
+                                <th class="product-remove">Remove</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for order_item in order_items %}
+                            <tr>
+                                <td class="product-thumbnail">
+                                    <img src="{{ order_item.item.image.url }}" alt="Image" class="img-fluid">
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black">{{ order_item.item.name }}</h2>
+                                </td>
+                                <td>${{ order_item.item.price }}</td>
+                                <td>
+                                    <input type="number" name="quantity_{{ order_item.id }}"
+                                           class="form-control text-center"
+                                           style="max-width: 70px; display: inline-block;"
+                                           value="{{ order_item.quantity }}" min="1">
+                                </td>
+                                <td>${{ order_item.total_price|floatformat:2 }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" name="remove_item"
+                                            value="{{ order_item.id }}" type="submit">X
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary btn-sm btn-block" type="submit">Update Cart</button>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'shop' %}" class="btn btn-outline-primary btn-sm btn-block">
+                                Continue Shopping</a>
+                        </div>
+                    </div>
+                </form>
 
             </div>
 

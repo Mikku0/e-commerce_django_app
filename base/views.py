@@ -97,7 +97,9 @@ def checkout(request):
 
 
 def shop(request):
-    return render(request, 'base/shop.html')
+    items = Item.objects.all()
+    context = {'items': items}
+    return render(request, 'base/shop.html', context)
 
 
 def thank_you(request):
