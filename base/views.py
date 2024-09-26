@@ -88,10 +88,12 @@ def cart(request):
         order_items = user_order.items.all()
         for order_item in order_items:
             order_item.total_price = order_item.quantity * order_item.item.price
+            user_order.total_price += order_item.total_price
     else:
         order_items = []
+    user_order.save()
 
-    context = {'order_items': order_items}
+    context = {'order_items': order_items, 'final_price': user_order.total_price}
     return render(request, 'base/cart.html', context)
 
 
