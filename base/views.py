@@ -74,8 +74,11 @@ def contact(request):
     return render(request, 'base/contact.html')
 
 
-def shop_single(request):
-    return render(request, 'base/shop-single.html')
+def shop_single(request, pk):
+    item = Item.objects.get(id=pk)
+    featured_items = Item.objects.all()[:6]
+    context = {'item': item, 'featured_items': featured_items}
+    return render(request, 'base/shop-single.html', context)
 
 
 @login_required(login_url='login')
