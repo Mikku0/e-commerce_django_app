@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem, OrderItem
 from .forms import UserForm, UserAddressForm
 from django.contrib.auth import update_session_auth_hash
+from django.db.models import Q
 
 
 def login_page(request):
@@ -104,7 +105,30 @@ def checkout(request):
 
 
 def shop(request):
+    category = request.GET.get('category')
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    size = request.GET.getlist('size')
+    color = request.GET.get('color')
+
     items = Item.objects.all()
+
+    if category:
+        items = items.filter(category__name=category)
+
+    if min_price and not max_price:
+        items = items.filter(price__gte=min_price)
+    elif not min_price and max_price:
+        items = items.filter(price__lte=max_price)
+    elif min_price and max_price:
+        items = items.filter(price__gte=min_price, price__lte=max_price)
+
+    if size:
+        items = items.filter(size__in=size)
+
+    if color:
+        items = items.filter(color=color)
+
     context = {'items': items}
     return render(request, 'base/shop.html', context)
 
