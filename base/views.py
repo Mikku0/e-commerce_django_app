@@ -59,7 +59,9 @@ def register_page(request):
 
 
 def home(request):
-    return render(request, 'base/index.html')
+    items = Item.objects.all()
+    context = {'items': items}
+    return render(request, 'base/index.html', context)
 
 
 def about(request):
