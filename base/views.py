@@ -89,6 +89,7 @@ def cart(request):
     user_order = Order.objects.filter(user=request.user).first()
     if user_order:
         order_items = user_order.items.all()
+        user_order.total_price = 0
         for order_item in order_items:
             order_item.total_price = order_item.quantity * order_item.item.price
             user_order.total_price += order_item.total_price
@@ -129,7 +130,15 @@ def shop(request):
     if color:
         items = items.filter(color=color)
 
-    context = {'items': items}
+    context = {
+        'items': items,
+        'selected_category': category,
+        'selected_min_price': min_price,
+        'selected_max_price': max_price,
+        'selected_size': size,
+        'selected_color': color,
+    }
+
     return render(request, 'base/shop.html', context)
 
 

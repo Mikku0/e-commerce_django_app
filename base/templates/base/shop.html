@@ -4,138 +4,148 @@
 
 <div class="site-wrap">
 
-  <div class="bg-light py-3">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 mb-0">
-          <a href="{% url 'home' %}">Home</a>
-          <span class="mx-2 mb-0">/</span>
-          <strong class="text-black">Shop</strong>
+    <div class="bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0">
+                    <a href="{% url 'home' %}">Home</a>
+                    <span class="mx-2 mb-0">/</span>
+                    <strong class="text-black">Shop</strong>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="site-section">
-    <div class="container">
-      <div class="row mb-5">
-        <div class="col-md-9 order-2">
-          <div class="row">
-            <div class="col-md-12 mb-5">
-              <div class="float-md-left mb-4">
-                <h2 class="text-black h5">Shop All</h2>
-              </div>
-              <div class="d-flex">
-                <div class="dropdown mr-1 ml-md-auto">
-                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuOffset"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Latest
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                    <a class="dropdown-item" href="#">Men</a>
-                    <a class="dropdown-item" href="#">Women</a>
-                    <a class="dropdown-item" href="#">Children</a>
-                  </div>
-                </div>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference"
-                    data-toggle="dropdown">Reference</button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                    <a class="dropdown-item" href="#">Relevance</a>
-                    <a class="dropdown-item" href="#">Name, A to Z</a>
-                    <a class="dropdown-item" href="#">Name, Z to A</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Price, low to high</a>
-                    <a class="dropdown-item" href="#">Price, high to low</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mb-5">
-            {% for item in items %}
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="{% url 'shop-single' item.id %}">
-                    <img src="{{ item.image.url }}" alt="Image placeholder" class="img-fluid">
-                  </a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="{% url 'shop-single' item.id %}">{{item.name}}</a></h3>
-                  <p class="mb-0">{{item.description}}</p>
-                  <p class="text-primary font-weight-bold">${{item.price}}</p>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
+    <div class="site-section">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-9 order-2">
+                    <div class="row">
+                        <div class="col-md-12 mb-5">
+                            <div class="float-md-left mb-4">
+                                <h2 class="text-black h5">Shop All</h2>
+                            </div>
+                            <div class="d-flex">
+                                <div class="dropdown mr-1 ml-md-auto">
+                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
+                                            id="dropdownMenuOffset"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Latest
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                                        <a class="dropdown-item" href="#">Men</a>
+                                        <a class="dropdown-item" href="#">Women</a>
+                                        <a class="dropdown-item" href="#">Children</a>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
+                                            id="dropdownMenuReference"
+                                            data-toggle="dropdown">Reference
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                        <a class="dropdown-item" href="#">Relevance</a>
+                                        <a class="dropdown-item" href="#">Name, A to Z</a>
+                                        <a class="dropdown-item" href="#">Name, Z to A</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Price, low to high</a>
+                                        <a class="dropdown-item" href="#">Price, high to low</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        {% for item in items %}
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="{% url 'shop-single' item.id %}">
+                                        <img src="{{ item.image.url }}" alt="Image placeholder" class="img-fluid">
+                                    </a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="{% url 'shop-single' item.id %}">{{item.name}}</a></h3>
+                                    <p class="mb-0">{{item.description}}</p>
+                                    <p class="text-primary font-weight-bold">${{item.price}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
 
-          <div class="row" data-aos="fade-up">
-            <div class="col-md-12 text-center">
-              <div class="site-block-27">
-                <ul>
-                  <li><a href="#">&lt;</a></li>
-                  <li class="active"><span>1</span></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">&gt;</a></li>
-                </ul>
-              </div>
+                    <div class="row" data-aos="fade-up">
+                        <div class="col-md-12 text-center">
+                            <div class="site-block-27">
+                                <ul>
+                                    <li><a href="#">&lt;</a></li>
+                                    <li class="active"><span>1</span></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">&gt;</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 order-1 mb-5 mb-md-0">
+                    <form method="GET" action="">
+                        <div class="border p-4 rounded mb-4">
+                            <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
+                            <select name="category" class="form-control mb-2">
+                                <option value="" {% if selected_category == "" %}selected{% endif %}>All Categories</option>
+                                <option value="Men" {% if selected_category == "Men" %}selected{% endif %}>Men</option>
+                                <option value="Women" {% if selected_category == "Women" %}selected{% endif %}>Women</option>
+                                <option value="Kids" {% if selected_category == "Kids" %}selected{% endif %}>Kids</option>
+                            </select>
+                        </div>
+
+                        <div class="border p-4 rounded mb-4">
+                            <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter by Price</h3>
+                            <input type="number" name="min_price" class="form-control mb-2" placeholder="Min Price"
+                                   value="{{ selected_min_price }}">
+                            <input type="number" name="max_price" class="form-control mb-2" placeholder="Max Price"
+                                   value="{{ selected_max_price }}">
+                        </div>
+
+                        <div class="border p-4 rounded mb-4">
+                            <h3 class="mb-3 h6 text-uppercase text-black d-block">Size</h3>
+                            <label for="s_sm" class="d-flex">
+                                <input type="checkbox" id="s_sm" name="size" value="S" class="mr-2 mt-1"
+                                       {% if "S" in selected_size %}checked{% endif %}> <span class="text-black">Small</span>
+                            </label>
+                            <label for="s_md" class="d-flex">
+                                <input type="checkbox" id="s_md" name="size" value="M" class="mr-2 mt-1"
+                                       {% if "M" in selected_size %}checked{% endif %}> <span class="text-black">Medium</span>
+                            </label>
+                            <label for="s_lg" class="d-flex">
+                                <input type="checkbox" id="s_lg" name="size" value="L" class="mr-2 mt-1"
+                                       {% if "L" in selected_size %}checked{% endif %}> <span class="text-black">Large</span>
+                            </label>
+                        </div>
+
+                        <div class="border p-4 rounded mb-4">
+                            <h3 class="mb-3 h6 text-uppercase text-black d-block">Color</h3>
+                            <select name="color" class="form-control">
+                                <option value="" {% if selected_color == "" %}selected{% endif %}>All Colors</option>
+                                <option value="Red" {% if selected_color == "Red" %}selected{% endif %}>Red</option>
+                                <option value="Green" {% if selected_color == "Green" %}selected{% endif %}>Green</option>
+                                <option value="Blue" {% if selected_color == "Blue" %}selected{% endif %}>Blue</option>
+                                <option value="Purple" {% if selected_color == "Purple" %}selected{% endif %}>Purple</option>
+                                <option value="White" {% if selected_color == "White" %}selected{% endif %}>White</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Apply Filters</button>
+                    </form>
+
+                </div>
             </div>
-          </div>
         </div>
-
-        <div class="col-md-3 order-1 mb-5 mb-md-0">
-          <form method="GET" action="">
-            <div class="border p-4 rounded mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
-              <select name="category" class="form-control mb-2">
-                <option value="">All Categories</option>
-                <option value="Men">Men</option>
-                <option value="Women">Women</option>
-                <option value="Children">Children</option>
-              </select>
-            </div>
-
-            <div class="border p-4 rounded mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter by Price</h3>
-              <input type="number" name="min_price" class="form-control mb-2" placeholder="Min Price">
-              <input type="number" name="max_price" class="form-control mb-2" placeholder="Max Price">
-            </div>
-
-            <div class="border p-4 rounded mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Size</h3>
-              <label for="s_sm" class="d-flex">
-                <input type="checkbox" id="s_sm" name="size" value="Small" class="mr-2 mt-1"> <span class="text-black">Small</span>
-              </label>
-              <label for="s_md" class="d-flex">
-                <input type="checkbox" id="s_md" name="size" value="Medium" class="mr-2 mt-1"> <span class="text-black">Medium</span>
-              </label>
-              <label for="s_lg" class="d-flex">
-                <input type="checkbox" id="s_lg" name="size" value="Large" class="mr-2 mt-1"> <span class="text-black">Large</span>
-              </label>
-            </div>
-
-            <div class="border p-4 rounded mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Color</h3>
-              <select name="color" class="form-control">
-                <option value="">All Colors</option>
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="purple">Purple</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Apply Filters</button>
-          </form>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
 
 {% endblock content %}
