@@ -57,7 +57,10 @@
                         </div>
 
                     </div>
-                    <p><a href="{% url 'cart' %}" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+                    <form method="POST" action="{% url 'add_item_to_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="buy-now btn btn-sm btn-primary">Add To Cart</button>
+                    </form>
 
                 </div>
             </div>

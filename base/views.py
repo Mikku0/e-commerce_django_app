@@ -200,3 +200,22 @@ def update_cart(request):
                             order_item.save()
 
         return redirect('cart')
+
+
+@login_required(login_url='login')
+def add_item_to_cart(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    order, created = Order.objects.get_or_create(user=request.user, status='pending')
+
+    if request.method == 'POST':
+        order_item, order_item_created = OrderItem.objects.get_or_create(order=order, item=item)
+
+        if not order_item_created:
+            order_item.quantity += 1
+            order_item.total_price = order_item.quantity * item.price
+        else:
+            order_item.total_price = item.price
+
+        order_item.save()
+        order.save()
+        return redirect('cart')
