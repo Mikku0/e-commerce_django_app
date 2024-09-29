@@ -217,14 +217,15 @@ def add_item_to_cart(request, item_id):
     order, created = Order.objects.get_or_create(user=request.user, status='pending')
 
     if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
         order_item, order_item_created = OrderItem.objects.get_or_create(order=order, item=item)
 
         if not order_item_created:
-            order_item.quantity += 1
-            order_item.total_price = order_item.quantity * item.price
+            order_item.quantity += quantity
         else:
-            order_item.total_price = item.price
+            order_item.quantity = quantity
 
+        order_item.total_price = order_item.quantity * item.price
         order_item.save()
         order.save()
         return redirect('cart')

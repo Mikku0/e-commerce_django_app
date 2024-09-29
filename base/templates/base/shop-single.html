@@ -45,56 +45,54 @@
                         </label>
                     </div>
                     <div class="mb-5">
-                        <div class="input-group mb-3" style="max-width: 120px;">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
-                            </div>
-                            <input type="text" class="form-control text-center" value="1" placeholder=""
-                                   aria-label="Example text with button addon" aria-describedby="button-addon1">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <form method="POST" action="{% url 'add_item_to_cart' item.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="buy-now btn btn-sm btn-primary">Add To Cart</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="site-section block-3 site-blocks-2 bg-light">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-7 site-section-heading text-center pt-4">
-                    <h2>Check other products!</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="nonloop-block-3 owl-carousel">
-                        {% for f_item in featured_items %}
-                        <div class="item">
-                            <div class="block-4 text-center">
-                                <figure class="block-4-image">
-                                    <img src="{{ f_item.image.url }}" alt="Image placeholder" class="img-fluid">
-                                </figure>
-                                <div class="block-4-text p-4">
-                                    <h3><a href="{% url 'shop-single' f_item.id %}">{{f_item.name}}</a></h3>
-                                    <p class="mb-0">{{f_item.description}}</p>
-                                    <p class="text-primary font-weight-bold">${{f_item.price}}</p>
+                        <form method="POST" action="{% url 'add_item_to_cart' item.id %}">
+                            {% csrf_token %}
+                            <div class="input-group mb-3" style="max-width: 120px;">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                                </div>
+                                <input type="number" class="form-control text-center" name="quantity" value="1" min="1"
+                                       placeholder=""
+                                       aria-label="Quantity" aria-describedby="button-addon1">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                                 </div>
                             </div>
+                            <button type="submit" class="buy-now btn btn-sm btn-primary">Add To Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-section block-3 site-blocks-2 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-7 site-section-heading text-center pt-4">
+                        <h2>Check other products!</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="nonloop-block-3 owl-carousel">
+                            {% for f_item in featured_items %}
+                            <div class="item">
+                                <div class="block-4 text-center">
+                                    <figure class="block-4-image">
+                                        <img src="{{ f_item.image.url }}" alt="Image placeholder" class="img-fluid">
+                                    </figure>
+                                    <div class="block-4-text p-4">
+                                        <h3><a href="{% url 'shop-single' f_item.id %}">{{f_item.name}}</a></h3>
+                                        <p class="mb-0">{{f_item.description}}</p>
+                                        <p class="text-primary font-weight-bold">${{f_item.price}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock content %}
+    {% endblock content %}
