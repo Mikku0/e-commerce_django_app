@@ -93,8 +93,9 @@ def cart(request):
         'discount20': 20
     }
     coupon_discount = 0
+    coupon = ''
     discount_value = 0
-    coupon_bool = True
+    invalid_coupon = False
     original_value = 0
 
     user_order = Order.objects.filter(user=request.user).first()
@@ -107,16 +108,17 @@ def cart(request):
         original_value = user_order.total_price
     else:
         order_items = []
-    if 'coupon_code' in request.POST:
+    if 'coupon_code' in request.POST:  # to external method before commit
         coupon_code = request.POST.get('coupon_code', '').strip()
         if coupon_code in COUPONS:
+            coupon = coupon_code
             coupon_discount = COUPONS[coupon_code]
             discount_value = user_order.total_price*(Decimal(coupon_discount) / Decimal(100))
             user_order.total_price -= discount_value
             user_order.total_price = round(user_order.total_price, 2)
             messages.success(request, f'Coupon "{coupon_code}" applied successfully for {coupon_discount}% discount!')
         else:
-            coupon_bool = False
+            invalid_coupon = True
 
     user_order.save()
 
@@ -124,9 +126,10 @@ def cart(request):
         'order_items': order_items,
         'final_price': user_order.total_price,
         'coupon_value': coupon_discount,
-        'coupon_bool': coupon_bool,
+        'invalid_coupon': invalid_coupon,
         'discount_value': round(discount_value, 2),
-        'original_value': original_value
+        'original_value': original_value,
+        'coupon': coupon
 
     }
     return render(request, 'base/cart.html', context)

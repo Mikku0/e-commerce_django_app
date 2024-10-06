@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-md-9 mb-3 mb-md-0">
                                 <input type="text" class="form-control py-3" name="coupon_code" id="coupon"
-                                       placeholder="Coupon Code">
+                                       placeholder="Coupon Code" {% if coupon_value > 0 %} value="{{coupon}}" {% endif %}>
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-primary btn-sm">Apply Coupon</button>
@@ -89,7 +89,7 @@
                                 <p></p>
                                 {% if coupon_value > 0 %}
                                     <p style="color: green;">Your discount code is {{ coupon_value }}%</p>
-                                {% elif coupon_bool == False %}
+                                {% elif invalid_coupon == True %}
                                     <p style="color: red;">Invalid coupon</p>
                                 {% endif %}
                             </div>
