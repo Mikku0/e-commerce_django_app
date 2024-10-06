@@ -7,6 +7,7 @@ from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem, O
 from .forms import UserForm, UserAddressForm
 from django.contrib.auth import update_session_auth_hash
 from django.db.models import Q
+from decimal import Decimal
 
 
 def login_page(request):
@@ -86,6 +87,16 @@ def shop_single(request, pk):
 
 @login_required(login_url='login')
 def cart(request):
+
+    COUPONS = {
+        'discount10': 10,
+        'discount20': 20
+    }
+    coupon_discount = 0
+    discount_value = 0
+    coupon_bool = True
+    original_value = 0
+
     user_order = Order.objects.filter(user=request.user).first()
     if user_order:
         order_items = user_order.items.all()
@@ -93,11 +104,31 @@ def cart(request):
         for order_item in order_items:
             order_item.total_price = order_item.quantity * order_item.item.price
             user_order.total_price += order_item.total_price
+        original_value = user_order.total_price
     else:
         order_items = []
+    if 'coupon_code' in request.POST:
+        coupon_code = request.POST.get('coupon_code', '').strip()
+        if coupon_code in COUPONS:
+            coupon_discount = COUPONS[coupon_code]
+            discount_value = user_order.total_price*(Decimal(coupon_discount) / Decimal(100))
+            user_order.total_price -= discount_value
+            user_order.total_price = round(user_order.total_price, 2)
+            messages.success(request, f'Coupon "{coupon_code}" applied successfully for {coupon_discount}% discount!')
+        else:
+            coupon_bool = False
+
     user_order.save()
 
-    context = {'order_items': order_items, 'final_price': user_order.total_price}
+    context = {
+        'order_items': order_items,
+        'final_price': user_order.total_price,
+        'coupon_value': coupon_discount,
+        'coupon_bool': coupon_bool,
+        'discount_value': round(discount_value, 2),
+        'original_value': original_value
+
+    }
     return render(request, 'base/cart.html', context)
 
 
