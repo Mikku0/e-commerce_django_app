@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -6,59 +5,9 @@ from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem, OrderItem, Coupon
 from .forms import UserForm, UserAddressForm
 from django.contrib.auth import update_session_auth_hash
-from django.db.models import Q
 from decimal import Decimal
 from .app_views.cart_views import cart, update_cart, add_item_to_cart, add_coupon_in_cart, remove_item_from_cart
-
-
-def login_page(request):
-    page = 'login'
-
-    if request.user.is_authenticated:
-        messages.success(request, 'You are already logged in')
-        return redirect('home')
-
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-
-        try:
-            user = CustomUser.objects.get(email=email)
-        except:
-            messages.error(request, 'User does not exist')
-
-        user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            messages.error(request, 'Email or password is wrong')
-
-    context = {'page': page}
-    return render(request, 'base/login_register.html', context)
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('home')
-
-
-def register_page(request):
-    form = UserForm
-
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            user.save()
-            login(request, user)
-            return redirect('home')
-        else:
-            messages.error(request, 'An error occurred')
-
-    return render(request, 'base/login_register.html', {'form': form})
+from .app_views.auth_views import login_page, logout_user, register_page
 
 
 def home(request):
