@@ -3,11 +3,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem, OrderItem
+from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem, OrderItem, Coupon
 from .forms import UserForm, UserAddressForm
 from django.contrib.auth import update_session_auth_hash
 from django.db.models import Q
 from decimal import Decimal
+from .app_views.cart_views import cart, update_cart, add_item_to_cart, add_coupon_in_cart, remove_item_from_cart
 
 
 def login_page(request):
@@ -85,56 +86,6 @@ def shop_single(request, pk):
     return render(request, 'base/shop-single.html', context)
 
 
-@login_required(login_url='login')
-def cart(request):
-
-    COUPONS = {
-        'discount10': 10,
-        'discount20': 20
-    }
-    coupon_discount = 0
-    coupon = ''
-    discount_value = 0
-    invalid_coupon = False
-    original_value = 0
-
-    user_order = Order.objects.filter(user=request.user).first()
-    if user_order:
-        order_items = user_order.items.all()
-        user_order.total_price = 0
-        for order_item in order_items:
-            order_item.total_price = order_item.quantity * order_item.item.price
-            user_order.total_price += order_item.total_price
-        original_value = user_order.total_price
-    else:
-        order_items = []
-    if 'coupon_code' in request.POST:  # to external method before commit
-        coupon_code = request.POST.get('coupon_code', '').strip()
-        if coupon_code in COUPONS:
-            coupon = coupon_code
-            coupon_discount = COUPONS[coupon_code]
-            discount_value = user_order.total_price*(Decimal(coupon_discount) / Decimal(100))
-            user_order.total_price -= discount_value
-            user_order.total_price = round(user_order.total_price, 2)
-            messages.success(request, f'Coupon "{coupon_code}" applied successfully for {coupon_discount}% discount!')
-        else:
-            invalid_coupon = True
-
-    user_order.save()
-
-    context = {
-        'order_items': order_items,
-        'final_price': user_order.total_price,
-        'coupon_value': coupon_discount,
-        'invalid_coupon': invalid_coupon,
-        'discount_value': round(discount_value, 2),
-        'original_value': original_value,
-        'coupon': coupon
-
-    }
-    return render(request, 'base/cart.html', context)
-
-
 def checkout(request):
     return render(request, 'base/checkout.html')
 
@@ -201,65 +152,3 @@ def user_address_update(request):
             messages.error(request, 'invalid data')
 
     return render(request, 'base/user-update-address.html', {'form': form})
-
-
-@login_required(login_url='login')
-def update_quantity(request, order_item_id, action):
-    order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user)
-
-    if action == 'increase':
-        order_item.quantity += 1
-    elif action == 'decrease' and order_item.quantity > 1:
-        order_item.quantity -= 1
-
-    order_item.save()
-    return redirect('cart')
-
-
-@login_required(login_url='login')
-def remove_item(request, order_item_id):
-    order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user)
-    order_item.delete()
-    return redirect('cart')
-
-
-@login_required(login_url='login')
-def update_cart(request):
-    if request.method == 'POST':
-        user_order = Order.objects.filter(user=request.user).first()
-        if user_order:
-            if 'remove_item' in request.POST:
-                order_item_id = request.POST.get('remove_item')
-                order_item = user_order.items.filter(id=order_item_id).first()
-                if order_item:
-                    order_item.delete()
-            else:
-                for order_item in user_order.items.all():
-                    quantity_field = f'quantity_{order_item.id}'
-                    if quantity_field in request.POST:
-                        new_quantity = int(request.POST[quantity_field])
-                        if new_quantity > 0:
-                            order_item.quantity = new_quantity
-                            order_item.save()
-
-        return redirect('cart')
-
-
-@login_required(login_url='login')
-def add_item_to_cart(request, item_id):
-    item = get_object_or_404(Item, id=item_id)
-    order, created = Order.objects.get_or_create(user=request.user, status='pending')
-
-    if request.method == 'POST':
-        quantity = int(request.POST.get('quantity', 1))
-        order_item, order_item_created = OrderItem.objects.get_or_create(order=order, item=item)
-
-        if not order_item_created:
-            order_item.quantity += quantity
-        else:
-            order_item.quantity = quantity
-
-        order_item.total_price = order_item.quantity * item.price
-        order_item.save()
-        order.save()
-        return redirect('cart')

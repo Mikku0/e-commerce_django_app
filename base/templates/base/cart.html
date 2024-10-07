@@ -70,7 +70,7 @@
             </div>
 
             <div class="row">
-                <form method="post" action="{% url 'cart' %}" class="col-md-6">
+                <form method="post" action="{% url 'add-coupon-in-cart' %}" class="col-md-6">
                     {% csrf_token %}
                     <div class="col-md-6">
                         <div class="row">
@@ -80,16 +80,16 @@
                             </div>
                             <div class="col-md-9 mb-3 mb-md-0">
                                 <input type="text" class="form-control py-3" name="coupon_code" id="coupon"
-                                       placeholder="Coupon Code" {% if coupon_value > 0 %} value="{{coupon}}" {% endif %}>
+                                       placeholder="Coupon Code" {% if coupon.discount > 0 %} value="{{coupon.name}}" {% endif %}>
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-primary btn-sm">Apply Coupon</button>
                             </div>
                             <div class="col-md-12">
                                 <p></p>
-                                {% if coupon_value > 0 %}
-                                    <p style="color: green;">Your discount code is {{ coupon_value }}%</p>
-                                {% elif invalid_coupon == True %}
+                                {% if coupon.discount > 0 %}
+                                    <p style="color: green;">Your discount is {{ coupon.discount }}%</p>
+                                {% elif coupon.discount == 0 %}
                                     <p style="color: red;">Invalid coupon</p>
                                 {% endif %}
                             </div>
@@ -109,16 +109,16 @@
                                     <p>Cart value</p>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <p>${{original_value}}</p>
+                                    <p>${{original_cart_value}}</p>
                                 </div>
                             </div>
-                            {% if coupon_value > 0 %}
+                            {% if coupon.discount > 0 %}
                             <div class="row mb-2">
                                 <div class="col-md-6">
                                     <p>Discount</p>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <p>- ${{discount_value}}</p>
+                                    <p>- ${{discount_price_value}}</p>
                                 </div>
                             </div>
                             {% endif %}
