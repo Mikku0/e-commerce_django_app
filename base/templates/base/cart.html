@@ -47,9 +47,12 @@
                                 </td>
                                 <td>${{ order_item.total_price|floatformat:2 }}</td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm" name="remove_item"
-                                            value="{{ order_item.id }}" type="submit">X
-                                    </button>
+                                    <form method="post" action="{% url 'remove_item' order_item.item.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="remove_from_cart">
+                                        <button class="btn btn-primary btn-sm" type="submit">X</button>
+                                    </form>
+
                                 </td>
                             </tr>
                             {% endfor %}
@@ -88,9 +91,9 @@
                             <div class="col-md-12">
                                 <p></p>
                                 {% if coupon.discount > 0 %}
-                                    <p style="color: green;">Your discount is {{ coupon.discount }}%</p>
+                                <p style="color: green;">Your discount is {{ coupon.discount }}%</p>
                                 {% elif coupon.discount == 0 %}
-                                    <p style="color: red;">Invalid coupon</p>
+                                <p style="color: red;">Invalid coupon</p>
                                 {% endif %}
                             </div>
                         </div>

@@ -6,7 +6,7 @@ from .models import CustomUser, Order, Category, Item, Wishlist, WishlistItem, O
 from .forms import UserForm, UserAddressForm
 from django.contrib.auth import update_session_auth_hash
 from decimal import Decimal
-from .app_views.cart_views import cart, update_cart, add_item_to_cart, add_coupon_in_cart, remove_item_from_cart
+from .app_views.cart_views import *
 from .app_views.auth_views import login_page, logout_user, register_page
 
 
@@ -21,7 +21,15 @@ def about(request):
 
 
 def wishlist(request):
-    return render(request, 'base/wishlist.html')
+    user_wishlist = Wishlist.objects.filter(user=request.user).first()
+    if user_wishlist:
+        wishlist_items = user_wishlist.items.all()
+    else:
+        wishlist_items = []
+    context = {
+        'wishlist_items': wishlist_items
+    }
+    return render(request, 'base/wishlist.html', context)
 
 
 def contact(request):

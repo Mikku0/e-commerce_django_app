@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from ..models import Order, Item, OrderItem, Coupon
+from ..models import Order, Item, OrderItem, Coupon, Wishlist, WishlistItem
 from decimal import Decimal
 
 
@@ -79,13 +79,13 @@ def add_coupon_in_cart(request):
     return redirect('cart')
 
 
-@login_required(login_url='login')
-def add_item_to_cart(request, item_id):
+@login_required
+def add_item(request, item_id):
     item = get_object_or_404(Item, id=item_id)
-    order, created = Order.objects.get_or_create(user=request.user, status='pending')
+    quantity = int(request.POST.get('quantity', 1))
 
-    if request.method == 'POST':
-        quantity = int(request.POST.get('quantity', 1))
+    if request.POST.get('action') == 'add_to_cart':
+        order, created = Order.objects.get_or_create(user=request.user, status='pending')
         order_item, order_item_created = OrderItem.objects.get_or_create(order=order, item=item)
 
         if not order_item_created:
@@ -98,10 +98,27 @@ def add_item_to_cart(request, item_id):
         order.save()
         return redirect('cart')
 
+    elif request.POST.get('action') == 'add_to_wishlist':
+        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+        WishlistItem.objects.get_or_create(wishlist=wishlist, item=item)
+
+        return redirect('wishlist')
+
 
 @login_required(login_url='login')
-def remove_item_from_cart(request, order_item_id):
-    order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user)
-    order_item.delete()
-    return redirect('cart')
+def remove_item(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
 
+    if request.POST.get('action') == 'remove_from_cart':
+        order_item = get_object_or_404(OrderItem, item=item, order__user=request.user)
+        order_item.delete()
+        return redirect('cart')
+
+    elif request.POST.get('action') == 'remove_from_wishlist':
+        wishlist = Wishlist.objects.filter(user=request.user).first()
+        if wishlist:
+            wishlist_item = get_object_or_404(WishlistItem, wishlist=wishlist, item=item)
+            wishlist_item.delete()
+        return redirect('wishlist')
+
+    return redirect('home')

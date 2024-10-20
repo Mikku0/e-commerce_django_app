@@ -44,22 +44,31 @@
                             <span class="d-inline-block text-black"> Extra Large</span>
                         </label>
                     </div>
-                    <div class="mb-5">
-                        <form method="POST" action="{% url 'add_item_to_cart' item.id %}">
-                            {% csrf_token %}
-                            <div class="input-group mb-3" style="max-width: 120px;">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                    <div class="row">
+                        <div class="mb-5">
+                            <form method="POST" action="{% url 'add_item' item.id %}">
+                                {% csrf_token %}
+                                <div class="input-group mb-3" style="max-width: 120px;">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;
+                                        </button>
+                                    </div>
+                                    <input type="number" class="form-control text-center" name="quantity" value="1"
+                                           min="1" placeholder=""
+                                           aria-label="Quantity" aria-describedby="button-addon1">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;
+                                        </button>
+                                    </div>
                                 </div>
-                                <input type="number" class="form-control text-center" name="quantity" value="1" min="1"
-                                       placeholder=""
-                                       aria-label="Quantity" aria-describedby="button-addon1">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                                </div>
-                            </div>
-                            <button type="submit" class="buy-now btn btn-sm btn-primary">Add To Cart</button>
-                        </form>
+                                <button type="submit" name="action" value="add_to_cart"
+                                        class="buy-now btn btn-sm btn-primary">Add To Cart
+                                </button>
+                                <button type="submit" name="action" value="add_to_wishlist"
+                                        class="btn btn-outline-primary btn-sm ml-2">Add To Wishlist
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,4 +104,5 @@
             </div>
         </div>
     </div>
-    {% endblock content %}
+</div>
+{% endblock content %}
